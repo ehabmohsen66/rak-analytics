@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+.env
+.env.*
+!.env.example
+
+# Local source/reference material; not required by the website runtime.
+extracted_assets/
+*.pptx
+*.docx
