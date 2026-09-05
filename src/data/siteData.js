@@ -2,7 +2,7 @@ export const SITE_INFO = {
   name: "RAK Analytics",
   tagline: "We don't just deliver data, we deliver results.",
   phone: "+961 4 41 48 42",
-  phoneDisplay: "+961 4 4142 48",
+  phoneDisplay: "+961 4 41 48 42",
   whatsapp: "+961 81 670100",
   whatsappLink: "https://wa.me/96181670100",
   email: "info@rak4analytics.com",
@@ -248,26 +248,7 @@ export const PRODUCTS = [
       { title: "Inventory Health Matrix", desc: "Classify items into fast-moving, slow-moving, and dead stock." }
     ]
   },
-  {
-    id: "market-analysis",
-    name: "Market Analysis",
-    tagline: "Standalone Market Intelligence & Research",
-    logo: "/assets/rak-logo.png",
-    description: "Comprehensive standalone market-related analytics, consumer sentiment intelligence, and industry benchmark reports to steer strategic expansion.",
-    bullets: [
-      "Rigorous industry benchmark reports tracking market share, price elasticity, and consumer demand",
-      "Macroeconomic and competitive landscape evaluation for GCC, Levant, and North America",
-      "Custom market research studies and primary data gathering tailored to your expansion targets",
-      "Clear, boardroom-ready executive summaries with concrete strategic recommendations"
-    ],
-    category: "Strategic Market Research",
-    demoVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
-    features: [
-      { title: "Sector Benchmarking", desc: "Compare your operating KPIs against regional top-quartile performers." },
-      { title: "Price Elasticity Modeling", desc: "Understand demand sensitivity before altering product price tiers." },
-      { title: "Expansion Feasibility", desc: "Data-driven geographic market entry assessments." }
-    ]
-  }
+
 ];
 
 export const DEPARTMENTS = [

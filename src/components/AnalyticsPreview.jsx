@@ -1,0 +1,31 @@
+import React, { useId, useState } from 'react';
+import { ArrowUpRight, ChevronDown, ChartNoAxesCombined, Layers3, CircleCheck, ArrowRight } from 'lucide-react';
+export const DEMO_VIEWS = {
+  Sales: { title: 'Sales performance', value: '$2.48M', label: 'Total revenue', change: '+18.6%', second: '1,284', secondLabel: 'Orders fulfilled', third: '$1,931', thirdLabel: 'Average order value', units: '$k', values: [115,145,125,190,168,216,208,278,246,312,296,370], names: ['Pharmaceuticals','Consumer goods','Retail'], shares: [48,32,20], insight: 'Pharmaceuticals contributes 48% of sample revenue. Explore the mix to understand where growth is coming from.' },
+  Finance: { title: 'Financial overview', value: '$846K', label: 'Operating profit', change: '+12.4%', second: '34.1%', secondLabel: 'Operating margin', third: '$1.12M', thirdLabel: 'Cash balance', units: '$k', values: [95,86,108,124,116,156,140,173,189,164,204,228], names: ['Operations','Commercial','Administration'], shares: [56,28,16], insight: 'Operating profit grows across the sample year. Compare the monthly trend with the cost allocation below.' },
+  Operations: { title: 'Operational overview', value: '94.2%', label: 'Orders on time', change: '+6.8 pts', second: '3.2 days', secondLabel: 'Order cycle time', third: '88.4%', thirdLabel: 'Equipment effectiveness', units: '%', values: [68,71,69,75,78,77,83,81,88,90,92,94], names: ['Production','Distribution','Warehouse'], shares: [45,35,20], insight: 'On-time fulfillment reaches 94% in the sample’s final month. Review the trend alongside equipment performance.' }
+};
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+export default function AnalyticsPreview({ compact = false, initialView = 'Sales', onExplore }) {
+  const [view, setView] = useState(initialView);
+  const [period, setPeriod] = useState(12);
+  const [point, setPoint] = useState(null);
+  const gradientId = useId().replace(/:/g, '');
+  const d = DEMO_VIEWS[view];
+  const values = d.values.slice(-period);
+  const labels = months.slice(-period);
+  const max = Math.max(...values) * 1.15;
+  const coords = values.map((v,i) => [22 + i * (656/(values.length-1)), 172 - v/max*145]);
+  const line = coords.map(([x,y],i) => `${i ? 'L' : 'M'}${x},${y}`).join(' ');
+  return <div className={`analytics-window ${compact ? 'compact' : ''}`}>
+    <div className="analytics-titlebar"><span className="window-brand"><Layers3 size={17}/> DataPulse <span>/ WORKSPACE</span></span><span className="sample-label">Sample data</span></div>
+    <div className="analytics-body">
+      <div className="analytics-sidebar" aria-label="Dashboard views"><span className="sidebar-label">OVERVIEW</span>{Object.keys(DEMO_VIEWS).map((v,i) => <button key={v} onClick={() => {setView(v);setPoint(null);}} className={view === v ? 'active' : ''} aria-pressed={view === v}><ChartNoAxesCombined size={16}/><span>{v}</span><small>0{i+1}</small></button>)}<div className="sidebar-bottom"><CircleCheck size={15}/><span>Connected insights</span></div></div>
+      <div className="analytics-main"><div className="analytics-heading"><div><span className="dashboard-overline">YOUR BUSINESS AT A GLANCE</span><h3>{d.title}</h3></div><div className="period-control" aria-label="Chart period">{[6,12].map(p => <button key={p} onClick={() => {setPeriod(p);setPoint(null);}} aria-pressed={period === p} className={period === p ? 'active' : ''}>{p}M</button>)}</div></div>
+        <div className="dashboard-stats" aria-live="polite"><div className="primary-stat"><span>{d.label}</span><strong>{d.value}</strong><small><ArrowUpRight size={13}/>{d.change} <em>vs. prior year</em></small></div><div><span>{d.secondLabel}</span><strong>{d.second}</strong><small>Full year · sample</small></div><div><span>{d.thirdLabel}</span><strong>{d.third}</strong><small>Full year · sample</small></div></div>
+        <div className="chart-panel"><div className="chart-heading"><span>{view === 'Sales' ? 'Revenue' : view === 'Finance' ? 'Profit' : 'On-time orders'} trend <small>({d.units})</small></span><span className="chart-legend"><i/> {point !== null ? `${labels[point]} · ${values[point]}${d.units === '%' ? '%' : 'K'}` : `Last ${period} months`}</span></div><div className="trend-chart"><svg viewBox="0 0 700 200" role="img" aria-label={`${view} sample trend: ${values.map((v,i)=>`${labels[i]} ${v}${d.units}`).join(', ')}`}><defs><linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#ef6000" stopOpacity=".3"/><stop offset="100%" stopColor="#ef6000" stopOpacity="0"/></linearGradient></defs>{[30,78,126,174].map(y => <line key={y} x1="0" x2="700" y1={y} y2={y} stroke="currentColor" strokeDasharray="3 5"/>)}<path d={`${line} L678,174 L22,174 Z`} fill={`url(#${gradientId})`}/><path key={`${view}${period}`} className="chart-line" d={line} fill="none" stroke="#ff7629" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>{coords.map(([x,y],i) => <g key={i} onMouseEnter={()=>setPoint(i)} onMouseLeave={()=>setPoint(null)}><circle cx={x} cy={y} r="14" fill="transparent"/><circle cx={x} cy={y} r={point === i || i===coords.length-1 ? '5' : '3'} fill={point === i || i===coords.length-1 ? '#ff7629' : '#191c21'} stroke="#ff7629" strokeWidth="2"/></g>)}</svg><div className="chart-months">{labels.map((m,i)=><button key={m} onFocus={()=>setPoint(i)} onBlur={()=>setPoint(null)} onClick={()=>setPoint(point===i?null:i)} aria-label={`${m}: ${values[i]}${d.units}`} className={point===i?'active':''}>{m}</button>)}</div></div></div>
+        {!compact && <div className="analytics-lower"><div className="revenue-mix"><div className="chart-heading">{view === 'Finance' ? 'Cost allocation' : view === 'Operations' ? 'Activity mix' : 'Revenue by sector'}</div>{d.names.map((n,i)=><div key={n} className="mix-row"><span>{n}</span><div><i style={{width:`${d.shares[i]}%`,opacity:1-i*.22}}/></div><strong>{d.shares[i]}%</strong></div>)}</div><div className="insight-note"><span><ChartNoAxesCombined size={15}/> THE STORY IN YOUR DATA</span><p>{d.insight}</p>{onExplore&&<button onClick={onExplore}>Explore dashboards <ArrowRight size={14}/></button>}</div></div>}
+      </div>
+    </div>
+  </div>;
+}

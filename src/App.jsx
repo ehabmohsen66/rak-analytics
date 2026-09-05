@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import HeroSlider from './components/HeroSlider';
 import USPsSection from './components/USPsSection';
 import ProductsSection from './components/ProductsSection';
 import IndustriesSection from './components/IndustriesSection';
-import ClientsCertifications from './components/ClientsCertifications';
+import ClientsCertifications, { ClientStrip } from './components/ClientsCertifications';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 
@@ -27,20 +27,25 @@ import TermsModal from './components/TermsModal';
 import { DASHBOARDS_CATALOG, PRODUCTS } from './data/siteData';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
+  const validTabs = ['home','solutions','products','services','about','partners','news','contact','dashboard-sub'];
+  const readRoute = () => { const value = window.location.hash.slice(1).split('/')[0]; return validTabs.includes(value) ? value : 'home'; };
+  const [activeTab, updateActiveTab] = useState(readRoute);
+  const setActiveTab = (tab) => { updateActiveTab(tab); window.location.hash = tab; window.scrollTo({ top: 0, behavior: 'instant' }); };
+  useEffect(() => { const sync = () => { updateActiveTab(readRoute()); window.scrollTo({ top: 0, behavior: 'instant' }); }; window.addEventListener('hashchange', sync); return () => window.removeEventListener('hashchange', sync); }, []);
+  useEffect(() => {
+    document.title = `RAK Analytics | ${activeTab === 'home' ? 'Your data. A sharper advantage.' : activeTab.replace('-sub','').replace(/^./, c => c.toUpperCase())}`;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => { if(entry.isIntersecting){entry.target.classList.remove('reveal-pending');observer.unobserve(entry.target);} }), { threshold: .08 });
+    const elements = document.querySelectorAll('.reveal');
+    elements.forEach(el => { if(el.getBoundingClientRect().top > window.innerHeight){ el.classList.add('reveal-pending'); observer.observe(el); } });
+    return () => { observer.disconnect(); elements.forEach(el => el.classList.remove('reveal-pending')); };
+  }, [activeTab]);
   const [selectedDashboard, setSelectedDashboard] = useState(DASHBOARDS_CATALOG[0]);
   const [selectedProduct, setSelectedProduct] = useState(PRODUCTS[0]);
   const [selectedIndustry, setSelectedIndustry] = useState('all');
 
   // Cart & Subscriptions State
-  const [cartItems, setCartItems] = useState([
-    {
-      id: DASHBOARDS_CATALOG[0].id,
-      title: DASHBOARDS_CATALOG[0].title,
-      department: DASHBOARDS_CATALOG[0].department,
-      price: DASHBOARDS_CATALOG[0].price
-    }
-  ]);
+  const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Modals
@@ -55,14 +60,8 @@ export default function App() {
 
   // Cart Handlers
   const addToCart = (item, tier = 'individual') => {
-    const itemPrice = tier === 'module' && item.bundlePrice ? item.bundlePrice : item.price;
-    const exists = cartItems.some(ci => ci.id === item.id);
-    if (exists) {
-      setCartItems(cartItems.filter(ci => ci.id !== item.id));
-    } else {
-      setCartItems([...cartItems, { ...item, price: itemPrice }]);
-      setIsCartOpen(true);
-    }
+    setCartItems(previous => [...previous.filter(ci => ci.id !== item.id), {...item, tier, isSuite: tier === 'module'}]);
+    setIsCartOpen(true);
   };
 
   const removeFromCart = (id) => {
@@ -96,7 +95,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f7f5f0] text-[#17191c]">
+    <div className="min-h-screen flex flex-col bg-[#f4f5f6] text-[#17191c]">
       {/* Top Navbar */}
       <Navbar
         activeTab={activeTab}
@@ -110,7 +109,7 @@ export default function App() {
       />
 
       {/* Main Content Areas */}
-      <main className="flex-1">
+      <main id="main-content" className="flex-1" tabIndex={-1}>
         {activeTab === 'home' && (
           <>
             <HeroSlider
@@ -118,6 +117,7 @@ export default function App() {
               openDemoModal={() => handleOpenDemo('Hero Consultation')}
               openVideoModal={handleOpenVideo}
             />
+            <ClientStrip />
             <USPsSection
               setActiveTab={setActiveTab}
               openDemoModal={() => handleOpenDemo('Core Pillars Consultation')}
@@ -134,7 +134,7 @@ export default function App() {
               setSelectedIndustry={setSelectedIndustry}
               openDemoModal={() => handleOpenDemo('Free Business Assessment')}
             />
-            <ClientsCertifications />
+            <ClientsCertifications setActiveTab={setActiveTab} />
           </>
         )}
 
@@ -198,6 +198,7 @@ export default function App() {
 
       {/* Footer */}
       <Footer
+        setSelectedProduct={setSelectedProduct}
         setActiveTab={setActiveTab}
         openTermsModal={() => setIsTermsModalOpen(true)}
         openDemoModal={() => handleOpenDemo('Footer Consultation')}
@@ -208,12 +209,14 @@ export default function App() {
 
       {/* Interactive Modals */}
       <SubscriberPortalModal
+        openDemoModal={handleOpenDemo}
         isOpen={isSubscriberPortalOpen}
         onClose={() => setIsSubscriberPortalOpen(false)}
         onSelectDashboard={handleSelectDashboard}
       />
 
       <CartCheckoutModal
+        openDemoModal={handleOpenDemo}
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         cartItems={cartItems}
@@ -235,6 +238,7 @@ export default function App() {
       />
 
       <VideoPreviewModal
+        openDemoModal={handleOpenDemo}
         isOpen={isVideoModalOpen}
         onClose={() => setIsVideoModalOpen(false)}
         title={videoTitle}
