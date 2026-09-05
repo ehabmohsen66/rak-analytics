@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#191c22" />
+      <stop offset="100%" stop-color="#0b0d10" />
+    </linearGradient>
+
+    <!-- Bars Gradients -->
+    <linearGradient id="bar1Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff9944" />
+      <stop offset="100%" stop-color="#ef6000" />
+    </linearGradient>
+    <linearGradient id="bar2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff8822" />
+      <stop offset="100%" stop-color="#df5400" />
+    </linearGradient>
+    <linearGradient id="bar3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffaa44" />
+      <stop offset="100%" stop-color="#ef6000" />
+    </linearGradient>
+    <linearGradient id="bar4Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffbf66" />
+      <stop offset="100%" stop-color="#ff6a00" />
+    </linearGradient>
+
+    <!-- Trendline Gradient -->
+    <linearGradient id="trendGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff9d42" stop-opacity="0.8" />
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+
+    <!-- Area Glow under Trendline -->
+    <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef6000" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#ef6000" stop-opacity="0.0" />
+    </linearGradient>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <style>
+      @keyframes pulseBar1 {
+        0%, 100% { height: 18px; y: 34px; }
+        50% { height: 26px; y: 26px; }
+      }
+      @keyframes pulseBar2 {
+        0%, 100% { height: 28px; y: 24px; }
+        50% { height: 19px; y: 33px; }
+      }
+      @keyframes pulseBar3 {
+        0%, 100% { height: 38px; y: 14px; }
+        50% { height: 44px; y: 8px; }
+      }
+      @keyframes pulseBar4 {
+        0%, 100% { height: 44px; y: 8px; }
+        50% { height: 35px; y: 17px; }
+      }
+      @keyframes beaconRing {
+        0% { r: 3px; opacity: 0.8; stroke-width: 1.5; }
+        60% { r: 6.5px; opacity: 0.1; stroke-width: 1; }
+        100% { r: 7.5px; opacity: 0; stroke-width: 0.5; }
+      }
+      @keyframes livePulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.15); opacity: 0.9; }
+      }
+
+      .bar-1 { animation: pulseBar1 3s ease-in-out infinite; }
+      .bar-2 { animation: pulseBar2 3s ease-in-out infinite 0.5s; }
+      .bar-3 { animation: pulseBar3 3s ease-in-out infinite 1s; }
+      .bar-4 { animation: pulseBar4 3s ease-in-out infinite 1.5s; }
+      .beacon-wave { animation: beaconRing 2s ease-out infinite; transform-origin: 47px 11px; }
+      .beacon-core { animation: livePulse 2s ease-in-out infinite; transform-origin: 47px 11px; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .bar-1, .bar-2, .bar-3, .bar-4, .beacon-wave, .beacon-core {
+          animation: none !important;
+        }
+      }
+    </style>
+  </defs>
+
+  <!-- Container Squircle -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bgGrad)" stroke="#2b313c" stroke-width="1.5" />
+
+  <!-- Subtle Metric Grid Lines -->
+  <line x1="9" y1="26" x2="55" y2="26" stroke="#1d232c" stroke-width="1" stroke-dasharray="2 3" />
+  <line x1="9" y1="39" x2="55" y2="39" stroke="#1d232c" stroke-width="1" stroke-dasharray="2 3" />
+  <line x1="9" y1="52" x2="55" y2="52" stroke="#252d38" stroke-width="1.2" />
+
+  <!-- Shaded Area Under Curve -->
+  <polygon points="13,36 24,26 36,17 47,11 47,52 13,52" fill="url(#areaGrad)" />
+
+  <!-- Ascending Analytics Bars -->
+  <rect class="bar-1" x="10" y="34" width="7" height="18" rx="3.5" fill="url(#bar1Grad)" />
+  <rect class="bar-2" x="21" y="24" width="7" height="28" rx="3.5" fill="url(#bar2Grad)" />
+  <rect class="bar-3" x="32" y="14" width="7" height="38" rx="3.5" fill="url(#bar3Grad)" />
+  <rect class="bar-4" x="43" y="8" width="7" height="44" rx="3.5" fill="url(#bar4Grad)" />
+
+  <!-- Glowing Trendline / Sparkline -->
+  <path d="M 13.5 35 Q 23 25 34 16.5 T 47 10.5" fill="none" stroke="url(#trendGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#softGlow)" />
+
+  <!-- Beacon / Live Telemetry Node -->
+  <circle class="beacon-wave" cx="47" cy="11" r="3" fill="none" stroke="#38bdf8" stroke-width="1.5" />
+  <circle class="beacon-core" cx="47" cy="11" r="2.8" fill="#ffffff" stroke="#ef6000" stroke-width="1.5" />
+</svg>

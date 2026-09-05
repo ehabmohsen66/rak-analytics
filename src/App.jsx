@@ -25,6 +25,7 @@ import VideoPreviewModal from './components/VideoPreviewModal';
 import TermsModal from './components/TermsModal';
 
 import { DASHBOARDS_CATALOG, PRODUCTS } from './data/siteData';
+import { startDynamicFavicon, triggerAnalyticsSurge } from './utils/dynamicFavicon';
 
 export default function App() {
   const validTabs = ['home','solutions','products','services','about','partners','news','contact','dashboard-sub'];
@@ -32,6 +33,16 @@ export default function App() {
   const [activeTab, updateActiveTab] = useState(readRoute);
   const setActiveTab = (tab) => { updateActiveTab(tab); window.location.hash = tab; window.scrollTo({ top: 0, behavior: 'instant' }); };
   useEffect(() => { const sync = () => { updateActiveTab(readRoute()); window.scrollTo({ top: 0, behavior: 'instant' }); }; window.addEventListener('hashchange', sync); return () => window.removeEventListener('hashchange', sync); }, []);
+  
+  // Dynamic analytics favicon lifecycle & navigation reactivity
+  useEffect(() => {
+    const cleanupFavicon = startDynamicFavicon();
+    return cleanupFavicon;
+  }, []);
+
+  useEffect(() => {
+    triggerAnalyticsSurge();
+  }, [activeTab]);
   useEffect(() => {
     document.title = `RAK Analytics | ${activeTab === 'home' ? 'Your data. A sharper advantage.' : activeTab.replace('-sub','').replace(/^./, c => c.toUpperCase())}`;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
