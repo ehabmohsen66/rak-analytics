@@ -2,7 +2,61 @@ import React from 'react';
 import { ArrowUpRight, Check, Download, MousePointer2 } from 'lucide-react';
 import { PRODUCTS } from '../data/siteData';
 import AnalyticsPreview from '../components/AnalyticsPreview';
-export default function ProductsPage({selectedProduct,setSelectedProduct,openDemoModal,openVideoModal,openDataSheetModal}){
- const p=PRODUCTS.find(x=>x.id===selectedProduct?.id)||PRODUCTS[0];
- return <div className="inner-page"><div className="signal-container"><header className="inner-header"><span className="signal-eyebrow">THE RAK PRODUCT FAMILY</span><h1>Built for your business.<br/><span>Ready for what’s next.</span></h1><p>Discover analytics products for your industry and connected dashboards for the departments that keep your business moving.</p></header><div className="detail-tabs" aria-label="Select product">{PRODUCTS.map(x=><button key={x.id} className={p.id===x.id?'active':''} onClick={()=>setSelectedProduct(x)} aria-pressed={p.id===x.id}>{x.name}</button>)}</div><div className="detail-hero" key={p.id}><div><span className="signal-eyebrow">{p.category}</span><h2>{p.name}</h2><p>{p.description}</p><div className="detail-features">{p.bullets.map(b=><div key={b}><Check size={18}/><span>{b}</span></div>)}</div><div className="hero-actions"><button className="signal-button orange" onClick={()=>openDemoModal(`${p.name} demo`)}>Meet {p.name}<ArrowUpRight size={17}/></button><button className="signal-text-link ink" onClick={()=>openDataSheetModal({...p,title:p.name,department:p.category,features:p.bullets})}>Product overview<Download size={16}/></button></div></div><div className="detail-architecture"><span>DESIGNED AROUND WHAT MATTERS</span>{p.features.map(f=><div key={f.title}><h3>{f.title}</h3><p>{f.desc}</p></div>)}</div></div><div className="inner-header-row" style={{marginBottom:23}}><div><span className="signal-eyebrow">FROM DATA TO A CLEARER PICTURE</span><p style={{fontSize:15,color:'#6a7582',marginTop:12}}>Try an illustrative analytics workspace with sample data.</p></div><button className="signal-text-link ink" onClick={()=>openVideoModal(`${p.name} · guided preview`)}>Open interactive preview<MousePointer2 size={17}/></button></div><AnalyticsPreview key={p.id} initialView={p.id==='procurevision'?'Finance':p.id==='fieldspark'?'Operations':'Sales'}/></div></div>;
+
+export default function ProductsPage({ selectedProduct, setSelectedProduct, openDemoModal, openVideoModal, openDataSheetModal }) {
+  const product = PRODUCTS.find((item) => item.id === selectedProduct?.id) || PRODUCTS[0];
+
+  const selectProduct = (item) => {
+    setSelectedProduct(item);
+    window.location.hash = `products/${item.id}`;
+  };
+
+  return (
+    <div className="inner-page">
+      <div className="signal-container">
+        <header className="inner-header">
+          <span className="signal-eyebrow">THE RAK PRODUCT FAMILY</span>
+          <h1>Built for your business.<br /><span>Ready for what’s next.</span></h1>
+          <p>Discover analytics products for your industry and connected dashboards for the departments that keep your business moving.</p>
+        </header>
+
+        <div className="detail-tabs" aria-label="Select product">
+          {PRODUCTS.map((item) => (
+            <button key={item.id} className={product.id === item.id ? 'active' : ''} onClick={() => selectProduct(item)} aria-pressed={product.id === item.id}>
+              {item.name}
+            </button>
+          ))}
+        </div>
+        <p className="product-route-note">Each product has a shareable page with its benefits, architecture, guided preview, and downloadable overview.</p>
+
+        <div className="detail-hero" key={product.id}>
+          <div>
+            <span className="signal-eyebrow">{product.category}</span>
+            <h2>{product.name}</h2>
+            <p>{product.description}</p>
+            <div className="detail-features">
+              {product.bullets.map((bullet) => <div key={bullet}><Check size={18} /><span>{bullet}</span></div>)}
+            </div>
+            <div className="hero-actions">
+              <button className="signal-button orange" onClick={() => openDemoModal(`${product.name} demo`)}>Request a {product.name} demo<ArrowUpRight size={17} /></button>
+              <button className="signal-text-link ink" onClick={() => openDataSheetModal({ ...product, title: product.name, department: product.category, features: product.bullets })}>Download overview<Download size={16} /></button>
+            </div>
+          </div>
+          <div className="detail-architecture">
+            <span>DESIGNED AROUND WHAT MATTERS</span>
+            {product.features.map((feature) => <div key={feature.title}><h3>{feature.title}</h3><p>{feature.desc}</p></div>)}
+          </div>
+        </div>
+
+        <div className="inner-header-row" style={{ marginBottom: 23 }}>
+          <div>
+            <span className="signal-eyebrow">FROM DATA TO A CLEARER PICTURE</span>
+            <p style={{ fontSize: 15, color: '#6a7582', marginTop: 12 }}>Try an illustrative analytics workspace with sample data. Live dashboards and report downloads are available to subscribed clients.</p>
+          </div>
+          <button className="signal-text-link ink" onClick={() => openVideoModal(`${product.name} · guided preview`)}>Open interactive preview<MousePointer2 size={17} /></button>
+        </div>
+        <AnalyticsPreview key={product.id} initialView={product.id === 'procurevision' ? 'Finance' : product.id === 'fieldspark' ? 'Operations' : 'Sales'} />
+      </div>
+    </div>
+  );
 }

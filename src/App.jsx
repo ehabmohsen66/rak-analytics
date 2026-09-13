@@ -30,9 +30,30 @@ import { startDynamicFavicon, triggerAnalyticsSurge } from './utils/dynamicFavic
 export default function App() {
   const validTabs = ['home','solutions','products','services','about','partners','news','contact','dashboard-sub'];
   const readRoute = () => { const value = window.location.hash.slice(1).split('/')[0]; return validTabs.includes(value) ? value : 'home'; };
+  const readRouteItem = () => decodeURIComponent(window.location.hash.slice(1).split('/')[1] || '');
   const [activeTab, updateActiveTab] = useState(readRoute);
+  const [routeItem, setRouteItem] = useState(readRouteItem);
   const setActiveTab = (tab) => { updateActiveTab(tab); window.location.hash = tab; window.scrollTo({ top: 0, behavior: 'instant' }); };
-  useEffect(() => { const sync = () => { updateActiveTab(readRoute()); window.scrollTo({ top: 0, behavior: 'instant' }); }; window.addEventListener('hashchange', sync); return () => window.removeEventListener('hashchange', sync); }, []);
+  useEffect(() => {
+    const sync = () => {
+      const route = readRoute();
+      const itemId = readRouteItem();
+      updateActiveTab(route);
+      setRouteItem(itemId);
+      if (route === 'products' && itemId) {
+        const product = PRODUCTS.find(item => item.id === itemId);
+        if (product) setSelectedProduct(product);
+      }
+      if (route === 'dashboard-sub' && itemId) {
+        const dashboard = DASHBOARDS_CATALOG.find(item => item.id === itemId);
+        if (dashboard) setSelectedDashboard(dashboard);
+      }
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    };
+    sync();
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
+  }, []);
   
   // Dynamic analytics favicon lifecycle & navigation reactivity
   useEffect(() => {
@@ -76,7 +97,7 @@ export default function App() {
   };
 
   const removeFromCart = (id) => {
-    setCartItems(cartItems.filter(ci => ci.id !== id));
+    setCartItems(previous => previous.filter(ci => ci.id !== id));
   };
 
   const clearCart = () => {
@@ -86,7 +107,8 @@ export default function App() {
   // Nav to Dashboard subpage
   const handleSelectDashboard = (dash) => {
     setSelectedDashboard(dash);
-    setActiveTab('dashboard-sub');
+    updateActiveTab('dashboard-sub');
+    window.location.hash = `dashboard-sub/${dash.id}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -175,7 +197,10 @@ export default function App() {
         {activeTab === 'products' && (
           <ProductsPage
             selectedProduct={selectedProduct}
-            setSelectedProduct={setSelectedProduct}
+            setSelectedProduct={(product) => {
+              setSelectedProduct(product);
+              window.location.hash = `products/${product.id}`;
+            }}
             openDemoModal={handleOpenDemo}
             openVideoModal={handleOpenVideo}
             openDataSheetModal={handleOpenDataSheet}
@@ -199,7 +224,7 @@ export default function App() {
         )}
 
         {activeTab === 'news' && (
-          <NewsPage />
+          <NewsPage articleId={routeItem} />
         )}
 
         {activeTab === 'contact' && (
