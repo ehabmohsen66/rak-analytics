@@ -5,6 +5,7 @@ import USPsSection from './components/USPsSection';
 import ProductsSection from './components/ProductsSection';
 import IndustriesSection from './components/IndustriesSection';
 import ClientsCertifications, { ClientStrip } from './components/ClientsCertifications';
+import AssessmentBand from './components/AssessmentBand';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 
@@ -162,6 +163,7 @@ export default function App() {
               openVideoModal={handleOpenVideo}
               openDataSheetModal={handleOpenDataSheet}
             />
+            <AssessmentBand setActiveTab={setActiveTab} />
             <IndustriesSection
               setActiveTab={setActiveTab}
               setSelectedIndustry={setSelectedIndustry}

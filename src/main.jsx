@@ -10,3 +10,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 );
 
 import './signal.css';
+import './hero-banners.css';
+import './industries-gallery.css';
+import './products-logos.css';

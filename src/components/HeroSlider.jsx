@@ -1,31 +1,132 @@
-import React, { useState } from 'react';
-import { ArrowRight, ArrowUpRight, ArrowDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const stories = [
-  { label: 'Business intelligence', lead: 'Your data.', accent: 'A sharper', end: 'advantage.', description: 'Bring clarity to complexity. Turn your business data into the insights, decisions, and actions that move you forward.', cta: 'Explore our services', route: 'services' },
-  { label: 'Dashboards & reporting', lead: 'Every signal.', accent: 'One clear', end: 'picture.', description: 'See the whole business. Discover connected dashboards for sales, finance, inventory, and the teams behind your performance.', cta: 'Discover dashboards', route: 'solutions' },
-  { label: 'Intelligence for your industry', lead: 'Your industry.', accent: 'Understood', end: 'in depth.', description: 'From pharmaceutical markets to manufacturing floors, make decisions with analytics built around your world.', cta: 'Find your industry', route: 'industries' },
-  { label: 'Enterprise AI', lead: 'Intelligence.', accent: 'Built around', end: 'you.', description: 'Connect AI to your own business data. Explore private AI, predictive analytics, and agents designed around your operations.', cta: 'Meet our products', route: 'products' }
+/*
+  Home page slider: 4 banners from "ANALYTICS - WEBSITE SUBMISSION V10" (slides 4-7).
+  Headline, subtext and button text are the exact copy from those slides.
+  Redirections follow the slide notes:
+    Slider 1 / 4  "Learn More"       -> Services page
+    Slider 2      "Request a Demo"   -> Contact page
+    Slider 3      "Our Industries"   -> Industries section on the Home page
+*/
+const SLIDES = [
+  {
+    id: 'innovation',
+    theme: 'orange',
+    image: '/assets/hero-slide-1.jpg',
+    title: 'EMBRACING INNOVATION, HARNESSING DATA POWER',
+    text: 'Let’s take bold steps forward, united in our pursuit of excellence and collective success.',
+    cta: 'Learn More',
+    target: 'services'
+  },
+  {
+    id: 'dashboards',
+    theme: 'dark',
+    image: '/assets/hero-slide-2.jpg',
+    title: 'CUSTOMIZABLE DASHBOARDS FOR YOUR BUSINESS',
+    text: 'Clear, interactive dashboards that help you track performance, spot trends, and make smarter decisions.',
+    cta: 'Request a Demo',
+    target: 'contact'
+  },
+  {
+    id: 'industries',
+    theme: 'orange',
+    image: '/assets/hero-slide-3.jpg',
+    title: 'UNLOCK INSIGHTS FOR STRATEGIC GROWTH',
+    text: 'We cater to a diverse range of industries, providing tailored Data Analytics solutions.',
+    cta: 'Our Industries',
+    target: 'industries'
+  },
+  {
+    id: 'ai',
+    theme: 'gray',
+    image: '/assets/hero-slide-4.jpg',
+    title: 'DEDICATED AI FOR YOUR BUSINESS DATA',
+    text: 'We create tailored AI solutions within your database to deliver insights and power execution at scale.',
+    cta: 'Learn More',
+    target: 'services'
+  }
 ];
 
-export default function HeroSlider({ setActiveTab, openDemoModal }) {
+const INTERVAL = 8000;
+
+export default function HeroSlider({ setActiveTab }) {
   const [active, setActive] = useState(0);
-  const story = stories[active];
-  const navigate = () => story.route === 'industries' ? document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' }) : setActiveTab(story.route);
+  const [paused, setPaused] = useState(false);
+  const reduceMotion = useRef(false);
+  const count = SLIDES.length;
+
+  useEffect(() => {
+    reduceMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
+
+  useEffect(() => {
+    if (paused || reduceMotion.current) return undefined;
+    const timer = setInterval(() => setActive(i => (i + 1) % count), INTERVAL);
+    return () => clearInterval(timer);
+  }, [paused, active, count]);
+
+  const go = useCallback(target => {
+    if (target === 'industries') {
+      document.getElementById('industries')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      setActiveTab(target);
+    }
+  }, [setActiveTab]);
+
   return (
-    <section className="signal-hero" aria-roledescription="carousel" aria-label="RAK Analytics capabilities">
-      <div className="hero-art" aria-hidden="true" />
-      <div className="hero-shade" aria-hidden="true" />
-      <div className="signal-container hero-content">
-        <div className="hero-topline"><span className="signal-eyebrow"><i /> DATA. INTELLIGENCE. IMPACT.</span><span className="hero-coordinate">RAK ANALYTICS · EST. 2018</span></div>
-        <div className="hero-story" key={active} aria-live="polite" aria-atomic="true">
-          <div className="hero-category"><span>0{active + 1}</span> / {story.label}</div>
-          <h1>{story.lead}<br /><span>{story.accent}</span><br />{story.end}</h1>
-          <p>{story.description}</p>
-          <div className="hero-actions"><button className="signal-button orange" onClick={navigate}>{story.cta}<ArrowUpRight size={19} /></button><button className="signal-text-link" onClick={openDemoModal}>Let’s talk <ArrowRight size={18} /></button></div>
+    <section
+      className="hb"
+      aria-roledescription="carousel"
+      aria-label="RAK Analytics highlights"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
+      <div className="hb-stage" aria-live={paused ? 'polite' : 'off'}>
+        {SLIDES.map((slide, i) => {
+          const isActive = i === active;
+          const Heading = i === 0 ? 'h1' : 'h2';
+          return (
+            <div
+              key={slide.id}
+              className={`hb-slide hb-${slide.theme}${isActive ? ' is-active' : ''}`}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} of ${count}`}
+              aria-hidden={!isActive}
+            >
+              <img className="hb-img" src={slide.image} alt="" width="1903" height="566" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+              <div className="signal-container hb-inner">
+                <div className="hb-copy">
+                  <Heading>{slide.title}</Heading>
+                  <span className="hb-rule" aria-hidden="true" />
+                  <p>{slide.text}</p>
+                  <button className="hb-btn" tabIndex={isActive ? 0 : -1} onClick={() => go(slide.target)}>
+                    {slide.cta}<ArrowRight size={18} aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="hb-controls">
+        <div className="signal-container hb-controls-row">
+          <div className="hb-dots">
+            {SLIDES.map((slide, i) => (
+              <button key={slide.id} onClick={() => setActive(i)} aria-label={`Show slide ${i + 1} of ${count}`} aria-current={active === i ? 'true' : undefined}>
+                <span className={active === i ? 'selected' : ''} />
+              </button>
+            ))}
+          </div>
+          <div className="hb-arrows">
+            <button aria-label="Previous slide" onClick={() => setActive((active + count - 1) % count)}><ChevronLeft size={20} /></button>
+            <button aria-label="Next slide" onClick={() => setActive((active + 1) % count)}><ChevronRight size={20} /></button>
+          </div>
         </div>
-        <div className="hero-art-caption"><span className="caption-cross">+</span><span>COMPLEXITY, CONNECTED.<br /><strong>CLARITY, UNLOCKED.</strong></span></div>
-        <div className="hero-bottom"><button className="scroll-cue" onClick={() => document.getElementById('intelligence')?.scrollIntoView({ behavior: 'smooth' })}><span className="round-outline"><ArrowDown size={17}/></span> Discover the difference</button><div className="hero-pagination"><div className="hero-track">{stories.map((item, i) => <button key={item.label} onClick={() => setActive(i)} aria-label={`Show ${item.label}`} aria-current={active === i ? 'true' : undefined}><span className={active === i ? 'selected' : ''}/></button>)}</div><span className="hero-page-count">0{active + 1} <em>/ 04</em></span><button className="round-outline" aria-label="Previous slide" onClick={() => setActive((active + 3) % 4)}><ChevronLeft size={18}/></button><button className="round-outline" aria-label="Next slide" onClick={() => setActive((active + 1) % 4)}><ChevronRight size={18}/></button></div></div>
       </div>
     </section>
   );

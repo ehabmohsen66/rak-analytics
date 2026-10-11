@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowUpRight, Check, Download, MousePointer2 } from 'lucide-react';
 import { PRODUCTS } from '../data/siteData';
 import AnalyticsPreview from '../components/AnalyticsPreview';
+import ProductLogoWall from '../components/ProductLogoWall';
 
 export default function ProductsPage({ selectedProduct, setSelectedProduct, openDemoModal, openVideoModal, openDataSheetModal }) {
   const product = PRODUCTS.find((item) => item.id === selectedProduct?.id) || PRODUCTS[0];
@@ -19,6 +20,8 @@ export default function ProductsPage({ selectedProduct, setSelectedProduct, open
           <h1>Built for your business.<br /><span>Ready for what’s next.</span></h1>
           <p>Discover analytics products for your industry and connected dashboards for the departments that keep your business moving.</p>
         </header>
+
+        <ProductLogoWall showHeading products={PRODUCTS.filter((item) => item.id !== 'market-analysis')} activeId={product.id} onSelect={selectProduct} />
 
         <div className="detail-tabs" aria-label="Select product">
           {PRODUCTS.map((item) => (
