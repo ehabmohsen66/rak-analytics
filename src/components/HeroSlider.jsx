@@ -12,8 +12,9 @@ import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 const SLIDES = [
   {
     id: 'innovation',
-    theme: 'orange',
-    image: '/assets/hero-slide-1.jpg',
+    theme: 'light',
+    image: '/assets/gif/Banner-1-v1.gif',
+    poster: '/assets/gif/Banner-1-poster.jpg',
     title: 'EMBRACING INNOVATION, HARNESSING DATA POWER',
     text: 'Let’s take bold steps forward, united in our pursuit of excellence and collective success.',
     cta: 'Learn More',
@@ -21,8 +22,9 @@ const SLIDES = [
   },
   {
     id: 'dashboards',
-    theme: 'dark',
-    image: '/assets/hero-slide-2.jpg',
+    theme: 'light-accent',
+    image: '/assets/gif/Banner-2-v1.gif',
+    poster: '/assets/gif/Banner-2-poster.jpg',
     title: 'CUSTOMIZABLE DASHBOARDS FOR YOUR BUSINESS',
     text: 'Clear, interactive dashboards that help you track performance, spot trends, and make smarter decisions.',
     cta: 'Request a Demo',
@@ -30,8 +32,9 @@ const SLIDES = [
   },
   {
     id: 'industries',
-    theme: 'orange',
-    image: '/assets/hero-slide-3.jpg',
+    theme: 'light',
+    image: '/assets/gif/Futuristic-Port-Logistics-and-Global-Trade-v1.gif',
+    poster: '/assets/gif/Futuristic-Port-Logistics-poster.jpg',
     title: 'UNLOCK INSIGHTS FOR STRATEGIC GROWTH',
     text: 'We cater to a diverse range of industries, providing tailored Data Analytics solutions.',
     cta: 'Our Industries',
@@ -39,8 +42,9 @@ const SLIDES = [
   },
   {
     id: 'ai',
-    theme: 'gray',
-    image: '/assets/hero-slide-4.jpg',
+    theme: 'light-accent',
+    image: '/assets/gif/Banner-4-v1.gif',
+    poster: '/assets/gif/Banner-4-poster.jpg',
     title: 'DEDICATED AI FOR YOUR BUSINESS DATA',
     text: 'We create tailored AI solutions within your database to deliver insights and power execution at scale.',
     cta: 'Learn More',
@@ -53,6 +57,7 @@ const INTERVAL = 8000;
 export default function HeroSlider({ setActiveTab }) {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [loadedGifs, setLoadedGifs] = useState({ 0: true });
   const reduceMotion = useRef(false);
   const count = SLIDES.length;
 
@@ -60,11 +65,22 @@ export default function HeroSlider({ setActiveTab }) {
     reduceMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
 
+  // Ensure the active slide and upcoming slide always have their animated GIF enabled
+  useEffect(() => {
+    const next = (active + 1) % count;
+    setLoadedGifs(prev => (prev[active] && prev[next] ? prev : { ...prev, [active]: true, [next]: true }));
+  }, [active, count]);
+
   useEffect(() => {
     if (paused || reduceMotion.current) return undefined;
     const timer = setInterval(() => setActive(i => (i + 1) % count), INTERVAL);
     return () => clearInterval(timer);
   }, [paused, active, count]);
+
+  const handleFirstSlideLoad = useCallback(() => {
+    // Once the primary hero GIF is ready, preload all remaining slides
+    setLoadedGifs({ 0: true, 1: true, 2: true, 3: true });
+  }, []);
 
   const go = useCallback(target => {
     if (target === 'industries') {
@@ -88,16 +104,29 @@ export default function HeroSlider({ setActiveTab }) {
         {SLIDES.map((slide, i) => {
           const isActive = i === active;
           const Heading = i === 0 ? 'h1' : 'h2';
+          const shouldLoadGif = Boolean(loadedGifs[i]);
           return (
             <div
               key={slide.id}
               className={`hb-slide hb-${slide.theme}${isActive ? ' is-active' : ''}`}
+              style={{ '--hb-poster': `url('${slide.poster}')` }}
               role="group"
               aria-roledescription="slide"
               aria-label={`${i + 1} of ${count}`}
               aria-hidden={!isActive}
             >
-              <img className="hb-img" src={slide.image} alt="" width="1903" height="566" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+              <img
+                className="hb-img"
+                src={shouldLoadGif ? slide.image : slide.poster}
+                alt=""
+                width="1920"
+                height="648"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                fetchPriority={i === 0 ? 'high' : 'auto'}
+                decoding="async"
+                onLoad={i === 0 ? handleFirstSlideLoad : undefined}
+              />
+              <span className="hb-scrim" aria-hidden="true" />
               <div className="signal-container hb-inner">
                 <div className="hb-copy">
                   <Heading>{slide.title}</Heading>

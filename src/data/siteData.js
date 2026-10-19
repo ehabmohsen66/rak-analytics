@@ -32,7 +32,7 @@ export const HERO_SLIDES = [
     ctaPrimary: "Explore Solutions",
     ctaSecondary: "Request a Demo",
     link: "solutions",
-    image: "/assets/banner-innovation.png",
+    image: "/assets/gif/Banner-1-v1.gif",
     fallbackBg: "linear-gradient(135deg, #14181d 0%, #212529 50%, #273140 100%)",
     highlights: ["Real-time KPI Tracking", "Predictive Forecasting", "Executive Dashboards"]
   },
@@ -44,7 +44,7 @@ export const HERO_SLIDES = [
     ctaPrimary: "Browse Dashboards",
     ctaSecondary: "Free Business Assessment",
     link: "solutions",
-    image: "/assets/banner-dashboards.png",
+    image: "/assets/gif/Banner-2-v1.gif",
     fallbackBg: "linear-gradient(135deg, #212529 0%, #273140 60%, #1e2530 100%)",
     highlights: ["Over 50+ Modular Views", "Cross-Platform Sync", "Role-Based Permissions"]
   },
@@ -56,7 +56,7 @@ export const HERO_SLIDES = [
     ctaPrimary: "View Industries",
     ctaSecondary: "Contact Experts",
     link: "industries",
-    image: "/assets/banner-industries.png",
+    image: "/assets/gif/Futuristic-Port-Logistics-and-Global-Trade-v1.gif",
     fallbackBg: "linear-gradient(135deg, #1a1f26 0%, #212529 50%, #ef6000 120%)",
     highlights: ["Pharma & IQVIA Insights", "Supply Chain Optimization", "FMCG Retail Analytics"]
   },
@@ -68,7 +68,7 @@ export const HERO_SLIDES = [
     ctaPrimary: "Discover In-House AI",
     ctaSecondary: "Speak With an Engineer",
     link: "products",
-    image: "/assets/banner-ai.png",
+    image: "/assets/gif/Banner-4-v1.gif",
     fallbackBg: "linear-gradient(135deg, #0f1216 0%, #212529 50%, #273140 100%)",
     highlights: ["Private On-Premise AI", "Agentic Autonomous Tasks", "Universal ERP Connector"]
   }
