@@ -57,4 +57,53 @@
   .ab-inner{padding:42px 0 26px;order:1;height:auto;display:block}
   .ab-img{position:relative;order:2;inset:auto;height:clamp(190px,44vw,320px);object-position:78% center}
 }
+
+/* Static presentation deck version (?v=1, ?v=static, or /static/) */
+.hb.hb-static{background:#231f20;color:#fff}
+.hb.hb-static .hb-slide{min-height:clamp(400px,34vw,600px);background:var(--hb-bg)}
+.hb.hb-static .hb-orange{--hb-bg:#ff7415;--hb-title:#fff;--hb-text:#fff;--hb-btn-bg:#fff;--hb-btn-fg:#231f20;--hb-btn-hover:#231f20;--hb-btn-hover-fg:#fff}
+.hb.hb-static .hb-dark{--hb-bg:#231f20;--hb-title:#ff7415;--hb-text:#f1efef;--hb-btn-bg:#ff7415;--hb-btn-fg:#fff;--hb-btn-hover:#fff;--hb-btn-hover-fg:#231f20}
+.hb.hb-static .hb-gray{--hb-bg:#606060;--hb-title:#fff;--hb-text:#fff;--hb-btn-bg:#fff;--hb-btn-fg:#231f20;--hb-btn-hover:#ff7415;--hb-btn-hover-fg:#fff}
+.hb.hb-static .hb-slide .hb-inner{min-height:clamp(400px,34vw,600px);padding-bottom:34px}
+.hb.hb-static .hb-copy,.ab.ab-static .ab-copy{max-width:min(540px,50vw - 36px)}
+.hb.hb-static .hb-copy h1,.hb.hb-static .hb-copy h2,.ab.ab-static .ab-copy h2{letter-spacing:.01em;line-height:1.1;font-size:clamp(28px,3.3vw,52px);color:var(--hb-title);text-shadow:none}
+.hb.hb-static .hb-rule,.ab.ab-static .hb-rule{width:78px;height:3px;border-radius:0;background:#fff;box-shadow:none;margin:24px 0 20px}
+.hb.hb-static .hb-copy p,.ab.ab-static .ab-copy p{font-size:clamp(15px,1.25vw,18px);font-weight:400;line-height:1.65;color:var(--hb-text,#f1efef);margin:0 0 30px;max-width:460px;text-shadow:none}
+.hb.hb-static .hb-btn,.ab.ab-static .hb-btn{min-height:48px;padding:13px 26px;border-radius:4px;background:var(--hb-btn-bg,#ff7415);color:var(--hb-btn-fg,#fff);border:0;box-shadow:none}
+.hb.hb-static .hb-btn svg,.ab.ab-static .hb-btn svg{color:currentColor}
+.hb.hb-static .hb-btn:hover,.ab.ab-static .hb-btn:hover{background:var(--hb-btn-hover,#fff);color:var(--hb-btn-hover-fg,#231f20);transform:translateY(-1px);box-shadow:none}
+.hb.hb-static .hb-btn:hover svg,.ab.ab-static .hb-btn:hover svg{color:currentColor;transform:none}
+.hb.hb-static .hb-btn:focus-visible,.hb.hb-static .hb-dots button:focus-visible,.hb.hb-static .hb-arrows button:focus-visible,.ab.ab-static .hb-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.hb.hb-static .hb-controls-row{padding-bottom:14px}
+.hb.hb-static .hb-dots{background:transparent;backdrop-filter:none;padding:0;border:0;box-shadow:none}
+.hb.hb-static .hb-dots button{width:40px;height:40px}
+.hb.hb-static .hb-dots span{background:#ffffff66}
+.hb.hb-static .hb-dots span.selected{background:#fff;box-shadow:none}
+.hb.hb-static .hb-arrows button{border:1px solid #ffffffb0;background:#00000026;backdrop-filter:blur(2px);box-shadow:none}
+.hb.hb-static .hb-arrows button:hover{background:#00000066;border-color:#ffffffb0;transform:none}
+
+.ab.ab-static{background:#231f20;color:#fff;min-height:clamp(340px,28vw,460px)}
+.ab.ab-static .ab-inner{--hb-btn-bg:#ff7415;--hb-btn-fg:#fff;--hb-btn-hover:#fff;--hb-btn-hover-fg:#231f20;--hb-title:#fff;--hb-text:#f1efef}
+.ab.ab-static .ab-copy h2{font-size:clamp(26px,2.8vw,44px)}
+
+.signal-cta.signal-cta-static{background:#ef6000}
+.signal-cta.signal-cta-static .signal-eyebrow{color:#ffdcc5;text-shadow:none}
+.signal-cta.signal-cta-static h2{text-shadow:none}
+.signal-cta.signal-cta-static h2 span{color:#ffbd91}
+.signal-cta.signal-cta-static .cta-arrow{background:transparent;backdrop-filter:none;border:1px solid #ffffff70;box-shadow:none}
+.signal-cta.signal-cta-static .cta-arrow:hover{background:#fff;color:#ef6000}
+
+@media(max-width:1000px){
+  .hb.hb-static{background:#231f20}
+  .hb.hb-static .hb-slide{background:var(--hb-bg);min-height:0}
+  .hb.hb-static .hb-slide .hb-inner{min-height:0;height:auto;padding:46px 0 30px;order:1}
+  .hb.hb-static .hb-copy,.ab.ab-static .ab-copy{max-width:640px}
+  .hb.hb-static .hb-img{height:clamp(190px,46vw,320px);object-position:82% center}
+  .hb.hb-static .hb-controls{background:#231f20}
+  .hb.hb-static .hb-controls-row{padding:6px 0 14px}
+  .ab.ab-static{background:#231f20;min-height:0}
+  .ab.ab-static .ab-inner{padding:46px 0 30px}
+  .ab.ab-static .ab-img{height:clamp(180px,44vw,300px);object-position:82% center}
+}
+
 @media(prefers-reduced-motion:reduce){.hb-slide{transition:none}.hb-btn{transition:none}}

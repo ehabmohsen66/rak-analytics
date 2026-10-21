@@ -31,6 +31,11 @@ const publicAssets = [
   'assets/hero-slide-3.jpg',
   'assets/hero-slide-4.jpg',
   'assets/assessment-band.jpg',
+  'assets/static/hero-slide-1.jpg',
+  'assets/static/hero-slide-2.jpg',
+  'assets/static/hero-slide-3.jpg',
+  'assets/static/hero-slide-4.jpg',
+  'assets/static/assessment-band.jpg',
   'assets/gif/Banner-1-v1.gif',
   'assets/gif/Banner-1-poster.jpg',
   'assets/gif/Banner-2-v1.gif',
@@ -69,6 +74,9 @@ function copyPublicAssets() {
         mkdirSync(resolve(destination, '..'), { recursive: true });
         copyFileSync(resolve('public', asset), destination);
       }
+      // Also generate /static/index.html so /static works as a clean path on any static host
+      mkdirSync(resolve('dist', 'static'), { recursive: true });
+      copyFileSync(resolve('dist', 'index.html'), resolve('dist', 'static', 'index.html'));
     },
   };
 }

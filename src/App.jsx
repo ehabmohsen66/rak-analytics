@@ -29,6 +29,11 @@ import { DASHBOARDS_CATALOG, PRODUCTS } from './data/siteData';
 import { startDynamicFavicon, triggerAnalyticsSurge } from './utils/dynamicFavicon';
 
 export default function App() {
+  const isStaticVersion = (() => {
+    const params = new URLSearchParams(window.location.search);
+    const v = (params.get('v') || params.get('version') || '').toLowerCase();
+    return v === '1' || v === 'static' || window.location.pathname.startsWith('/static');
+  })();
   const validTabs = ['home','solutions','products','services','about','partners','news','contact','dashboard-sub'];
   const readRoute = () => { const value = window.location.hash.slice(1).split('/')[0]; return validTabs.includes(value) ? value : 'home'; };
   const readRouteItem = () => decodeURIComponent(window.location.hash.slice(1).split('/')[1] || '');
@@ -129,7 +134,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f4f5f6] text-[#17191c]">
+    <div className={`min-h-screen flex flex-col bg-[#f4f5f6] text-[#17191c]${isStaticVersion ? ' is-static-version' : ''}`}>
       {/* Top Navbar */}
       <Navbar
         activeTab={activeTab}
@@ -150,6 +155,7 @@ export default function App() {
               setActiveTab={setActiveTab}
               openDemoModal={() => handleOpenDemo('Hero Consultation')}
               openVideoModal={handleOpenVideo}
+              isStatic={isStaticVersion}
             />
             <ClientStrip />
             <USPsSection
@@ -163,7 +169,7 @@ export default function App() {
               openVideoModal={handleOpenVideo}
               openDataSheetModal={handleOpenDataSheet}
             />
-            <AssessmentBand setActiveTab={setActiveTab} />
+            <AssessmentBand setActiveTab={setActiveTab} isStatic={isStaticVersion} />
             <IndustriesSection
               setActiveTab={setActiveTab}
               setSelectedIndustry={setSelectedIndustry}
@@ -240,6 +246,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         openTermsModal={() => setIsTermsModalOpen(true)}
         openDemoModal={() => handleOpenDemo('Footer Consultation')}
+        isStatic={isStaticVersion}
       />
 
       {/* Floating WhatsApp Contact */}
