@@ -34,6 +34,26 @@ export default function App() {
     const v = (params.get('v') || params.get('version') || '').toLowerCase();
     return v === '1' || v === 'static' || window.location.pathname.startsWith('/static');
   })();
+  const [isLightTheme, setIsLightTheme] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const themeParam = (params.get('theme') || params.get('mode') || '').toLowerCase();
+    if (themeParam === 'light' || themeParam === 'lite') return true;
+    if (themeParam === 'dark') return false;
+    try {
+      return localStorage.getItem('rak-header-footer-theme') === 'light';
+    } catch {
+      return false;
+    }
+  });
+  const toggleTheme = () => {
+    setIsLightTheme(prev => {
+      const next = !prev;
+      try {
+        localStorage.setItem('rak-header-footer-theme', next ? 'light' : 'dark');
+      } catch {}
+      return next;
+    });
+  };
   const validTabs = ['home','solutions','products','services','about','partners','news','contact','dashboard-sub'];
   const readRoute = () => { const value = window.location.hash.slice(1).split('/')[0]; return validTabs.includes(value) ? value : 'home'; };
   const readRouteItem = () => decodeURIComponent(window.location.hash.slice(1).split('/')[1] || '');
@@ -145,6 +165,8 @@ export default function App() {
         openDemoModal={() => handleOpenDemo()}
         selectedProduct={selectedProduct}
         setSelectedProduct={setSelectedProduct}
+        isLightTheme={isLightTheme}
+        toggleTheme={toggleTheme}
       />
 
       {/* Main Content Areas */}
@@ -247,6 +269,7 @@ export default function App() {
         openTermsModal={() => setIsTermsModalOpen(true)}
         openDemoModal={() => handleOpenDemo('Footer Consultation')}
         isStatic={isStaticVersion}
+        isLightTheme={isLightTheme}
       />
 
       {/* Floating WhatsApp Contact */}
