@@ -107,6 +107,13 @@ export const USPS = [
   }
 ];
 
+export const PRODUCT_CATEGORIES = [
+  "All Products",
+  "AI",
+  "BI & Data Analytics",
+  "Automation"
+];
+
 export const PRODUCTS = [
   {
     id: "woodpecker",
@@ -121,6 +128,7 @@ export const PRODUCTS = [
       "Identify whitespace market opportunities ahead of competitors across therapeutic classes"
     ],
     category: "Pharma & Life Sciences",
+    filterCategories: ["AI", "BI & Data Analytics"],
     demoVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     features: [
       { title: "IQVIA Data Ingestion", desc: "Automated ETL converting raw market data to clean analytical cubes." },
@@ -141,6 +149,7 @@ export const PRODUCTS = [
       "Strict data privacy protocols: queries execute inside your perimeter without data leak risk"
     ],
     category: "Enterprise AI & Integration",
+    filterCategories: ["AI"],
     demoVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     features: [
       { title: "Natural Language to BI", desc: "Translates plain English or Arabic questions into optimized data visualizations." },
@@ -161,6 +170,7 @@ export const PRODUCTS = [
       "Offline sync capability with instantaneous background synchronization when connection restores"
     ],
     category: "Field Operations & Mobility",
+    filterCategories: ["Automation"],
     demoVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     features: [
       { title: "Route & Visit Optimization", desc: "Reduces transit overhead and maximizes daily high-value client visits." },
@@ -181,6 +191,7 @@ export const PRODUCTS = [
       "Automated price variance analysis comparing purchase orders against benchmark market rates"
     ],
     category: "Procurement & Supply Chain",
+    filterCategories: ["BI & Data Analytics"],
     demoVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     features: [
       { title: "Spend Cube Analysis", desc: "Multidimensional slicing of corporate expenditure by vendor, SKU, and department." },
@@ -201,6 +212,7 @@ export const PRODUCTS = [
       "Comprehensive sell-in versus sell-out reconciliation across distributor networks"
     ],
     category: "Commercial & FMCG",
+    filterCategories: ["BI & Data Analytics"],
     demoVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     features: [
       { title: "Trade Promotion ROI", desc: "Measures incremental sales volume uplift versus promotional discount costs." },
@@ -221,6 +233,7 @@ export const PRODUCTS = [
       "Automated PDF executive report generation dispatched weekly/monthly to management"
     ],
     category: "ERP Dashboards & BI",
+    filterCategories: ["BI & Data Analytics", "Automation"],
     demoVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     features: [
       { title: "Plug-and-Play Connectors", desc: "Pre-mapped schema definitions that connect with your ERP database instantly." },
@@ -241,6 +254,7 @@ export const PRODUCTS = [
       "Native embedded views inside Odoo or accessible via standalone web portal"
     ],
     category: "Odoo Ecosystem",
+    filterCategories: ["BI & Data Analytics", "Automation"],
     demoVideo: "https://www.w3schools.com/html/mov_bbb.mp4",
     features: [
       { title: "Native Odoo Addon", desc: "Installs cleanly as a module in Odoo Community or Enterprise editions." },

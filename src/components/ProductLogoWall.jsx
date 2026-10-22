@@ -9,13 +9,41 @@ import { LOGOS } from './ProductMark';
   Odoo Drive: no logo artwork was supplied yet, so it shows a typographic placeholder.
 */
 
-export default function ProductLogoWall({ products, activeId, onSelect, onAll, showHeading = false }) {
+export default function ProductLogoWall({
+  products,
+  activeId,
+  onSelect,
+  onAll,
+  showHeading = false,
+  categories = [],
+  activeCategory = 'All Products',
+  onSelectCategory
+}) {
   return (
     <div className="plw reveal">
       {showHeading && (
         <div className="plw-head">
           <span className="signal-eyebrow">THE RAK PRODUCT FAMILY</span>
           <h2>Purpose-built.<br /><span>Business-ready.</span></h2>
+        </div>
+      )}
+      {categories.length > 0 && onSelectCategory && (
+        <div className="plw-filters" role="tablist" aria-label="Filter products by category">
+          {categories.map((category) => {
+            const isSelected = activeCategory === category;
+            return (
+              <button
+                key={category}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                className={`plw-filter-btn${isSelected ? ' is-active' : ''}`}
+                onClick={() => onSelectCategory(category)}
+              >
+                <span>{category}</span>
+              </button>
+            );
+          })}
         </div>
       )}
       <div className="plw-grid" role="group" aria-label="Product family">

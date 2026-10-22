@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowUpRight, Check, Download, MousePointer2 } from 'lucide-react';
-import { PRODUCTS } from '../data/siteData';
+import { PRODUCTS, PRODUCT_CATEGORIES } from '../data/siteData';
 import AnalyticsPreview from '../components/AnalyticsPreview';
 import ProductLogoWall from '../components/ProductLogoWall';
 
 export default function ProductsPage({ selectedProduct, setSelectedProduct, openDemoModal, openVideoModal, openDataSheetModal }) {
-  const product = PRODUCTS.find((item) => item.id === selectedProduct?.id) || PRODUCTS[0];
+  const [activeCategory, setActiveCategory] = useState('All Products');
+
+  const allProducts = useMemo(
+    () => PRODUCTS.filter((item) => item.id !== 'market-analysis'),
+    []
+  );
+
+  const filteredProducts = useMemo(() => {
+    if (activeCategory === 'All Products') return allProducts;
+    return allProducts.filter((item) => item.filterCategories?.includes(activeCategory));
+  }, [activeCategory, allProducts]);
+
+  useEffect(() => {
+    if (!selectedProduct) return;
+    if (
+      activeCategory !== 'All Products' &&
+      !selectedProduct.filterCategories?.includes(activeCategory)
+    ) {
+      setActiveCategory('All Products');
+    }
+  }, [selectedProduct?.id]);
+
+  const product =
+    filteredProducts.find((item) => item.id === selectedProduct?.id) ||
+    filteredProducts[0] ||
+    allProducts[0];
 
   const selectProduct = (item) => {
     setSelectedProduct(item);
@@ -21,10 +46,18 @@ export default function ProductsPage({ selectedProduct, setSelectedProduct, open
           <p>Discover analytics products for your industry and connected dashboards for the departments that keep your business moving.</p>
         </header>
 
-        <ProductLogoWall showHeading products={PRODUCTS.filter((item) => item.id !== 'market-analysis')} activeId={product.id} onSelect={selectProduct} />
+        <ProductLogoWall
+          showHeading
+          products={filteredProducts}
+          activeId={product.id}
+          onSelect={selectProduct}
+          categories={PRODUCT_CATEGORIES}
+          activeCategory={activeCategory}
+          onSelectCategory={setActiveCategory}
+        />
 
         <div className="detail-tabs" aria-label="Select product">
-          {PRODUCTS.map((item) => (
+          {filteredProducts.map((item) => (
             <button key={item.id} className={product.id === item.id ? 'active' : ''} onClick={() => selectProduct(item)} aria-pressed={product.id === item.id}>
               {item.name}
             </button>
