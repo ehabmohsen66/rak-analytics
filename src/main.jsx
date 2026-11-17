@@ -13,3 +13,4 @@ import './signal.css';
 import './hero-banners.css';
 import './industries-gallery.css';
 import './products-logos.css';
+import './light-theme.css';

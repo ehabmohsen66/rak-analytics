@@ -65,7 +65,7 @@ export default function ProductsPage({ selectedProduct, setSelectedProduct, open
         </div>
         <p className="product-route-note">Each product has a shareable page with its benefits, architecture, guided preview, and downloadable overview.</p>
 
-        <div className="detail-hero" key={product.id}>
+        <div className="detail-hero" key={`hero-${product.id}`}>
           <div>
             <span className="signal-eyebrow">{product.category}</span>
             <h2>{product.name}</h2>
@@ -87,11 +87,11 @@ export default function ProductsPage({ selectedProduct, setSelectedProduct, open
         <div className="inner-header-row" style={{ marginBottom: 23 }}>
           <div>
             <span className="signal-eyebrow">FROM DATA TO A CLEARER PICTURE</span>
-            <p style={{ fontSize: 15, color: '#6a7582', marginTop: 12 }}>Try an illustrative analytics workspace with sample data. Live dashboards and report downloads are available to subscribed clients.</p>
+            <p style={{ fontSize: 15, color: '#4a5361', marginTop: 12 }}>Try an illustrative analytics workspace with sample data. Live dashboards and report downloads are available to subscribed clients.</p>
           </div>
           <button className="signal-text-link ink" onClick={() => openVideoModal(`${product.name} · guided preview`)}>Open interactive preview<MousePointer2 size={17} /></button>
         </div>
-        <AnalyticsPreview key={product.id} initialView={product.id === 'procurevision' ? 'Finance' : product.id === 'fieldspark' ? 'Operations' : 'Sales'} />
+        <AnalyticsPreview key={`preview-${product.id}`} initialView={product.id === 'procurevision' ? 'Finance' : product.id === 'fieldspark' ? 'Operations' : 'Sales'} />
       </div>
     </div>
   );

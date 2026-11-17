@@ -37,10 +37,22 @@ export default function App() {
   const [isLightTheme, setIsLightTheme] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const themeParam = (params.get('theme') || params.get('mode') || '').toLowerCase();
-    if (themeParam === 'light' || themeParam === 'lite') return true;
+    const versionParam = (params.get('v') || params.get('version') || '').toLowerCase();
+    const path = window.location.pathname.toLowerCase();
+    if (
+      themeParam === 'light' ||
+      themeParam === 'lite' ||
+      versionParam === 'light' ||
+      versionParam === 'lite' ||
+      path.startsWith('/light') ||
+      path.startsWith('/lite')
+    ) {
+      return true;
+    }
     if (themeParam === 'dark') return false;
     try {
-      return localStorage.getItem('rak-header-footer-theme') === 'light';
+      const saved = localStorage.getItem('rak-site-theme') || localStorage.getItem('rak-header-footer-theme');
+      return saved === 'light';
     } catch {
       return false;
     }
@@ -49,11 +61,21 @@ export default function App() {
     setIsLightTheme(prev => {
       const next = !prev;
       try {
-        localStorage.setItem('rak-header-footer-theme', next ? 'light' : 'dark');
+        const val = next ? 'light' : 'dark';
+        localStorage.setItem('rak-site-theme', val);
+        localStorage.setItem('rak-header-footer-theme', val);
       } catch {}
       return next;
     });
   };
+  useEffect(() => {
+    document.documentElement.classList.toggle('is-light-theme', isLightTheme);
+    document.body.classList.toggle('is-light-theme', isLightTheme);
+    return () => {
+      document.documentElement.classList.remove('is-light-theme');
+      document.body.classList.remove('is-light-theme');
+    };
+  }, [isLightTheme]);
   const validTabs = ['home','solutions','products','services','about','partners','news','contact','dashboard-sub'];
   const readRoute = () => { const value = window.location.hash.slice(1).split('/')[0]; return validTabs.includes(value) ? value : 'home'; };
   const readRouteItem = () => decodeURIComponent(window.location.hash.slice(1).split('/')[1] || '');
@@ -154,7 +176,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col bg-[#f4f5f6] text-[#17191c]${isStaticVersion ? ' is-static-version' : ''}`}>
+    <div className={`min-h-screen flex flex-col ${isLightTheme ? 'bg-white text-[#16191e] is-light-theme' : 'bg-[#f4f5f6] text-[#17191c]'}${isStaticVersion ? ' is-static-version' : ''}`}>
       {/* Top Navbar */}
       <Navbar
         activeTab={activeTab}

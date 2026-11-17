@@ -74,9 +74,11 @@ function copyPublicAssets() {
         mkdirSync(resolve(destination, '..'), { recursive: true });
         copyFileSync(resolve('public', asset), destination);
       }
-      // Also generate /static/index.html so /static works as a clean path on any static host
-      mkdirSync(resolve('dist', 'static'), { recursive: true });
-      copyFileSync(resolve('dist', 'index.html'), resolve('dist', 'static', 'index.html'));
+      // Also generate /static/index.html, /light/index.html, and /lite/index.html as clean paths on static hosts
+      for (const dir of ['static', 'light', 'lite']) {
+        mkdirSync(resolve('dist', dir), { recursive: true });
+        copyFileSync(resolve('dist', 'index.html'), resolve('dist', dir, 'index.html'));
+      }
     },
   };
 }

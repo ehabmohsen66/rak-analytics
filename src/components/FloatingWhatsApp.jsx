@@ -7,46 +7,44 @@ export default function FloatingWhatsApp() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex items-end gap-3">
-      {/* Tooltip Dialog */}
       {showTooltip && (
-        <div className="hidden sm:block bg-white rounded-brand-lg shadow-brand-elevated border border-gray-200 p-4 max-w-xs text-[#212529] animate-fadeIn">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-              <span className="font-bold text-xs text-gray-900">RAK Analytics Support</span>
-            </div>
-            <button 
+        <div className="hidden sm:block bg-white rounded-brand-lg shadow-brand-elevated border border-[#828a96] p-4 max-w-xs text-[#16191e] animate-fadeIn">
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="font-bold text-xs text-[#16191e]">RAK Analytics Support</span>
+            <button
+              type="button"
+              aria-label="Close WhatsApp support card"
               onClick={() => setShowTooltip(false)}
-              className="text-gray-400 hover:text-gray-600"
+              className="w-11 h-11 -mr-2 -my-2 flex items-center justify-center text-[#4a5361] hover:text-[#16191e]"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-xs text-gray-600 mb-3">
+          <p className="text-xs text-[#4a5361] mb-3 leading-relaxed">
             Questions regarding our dashboards or custom ERP connectors? Chat directly with our solutions architect.
           </p>
           <a
             href={SITE_INFO.whatsappLink}
             target="_blank"
             rel="noreferrer"
-            className="block text-center py-2 px-3 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold rounded-brand-md transition-colors"
+            className="block text-center py-2.5 px-3 bg-[#126b34] hover:bg-[#0d5227] text-white text-xs font-bold rounded-brand-md transition-colors min-h-[44px] flex items-center justify-center"
           >
             Start WhatsApp Chat
           </a>
         </div>
       )}
 
-      {/* Floating Button */}
       <a
         href={SITE_INFO.whatsappLink}
         target="_blank"
         rel="noreferrer"
+        aria-label="Chat on WhatsApp (+961 81 670100)"
         onMouseEnter={() => setShowTooltip(true)}
-        className="w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-brand-elevated flex items-center justify-center hover:scale-110 transition-all duration-300 relative group"
+        onFocus={() => setShowTooltip(true)}
+        className="w-14 h-14 rounded-full bg-[#126b34] hover:bg-[#0d5227] text-white shadow-brand-elevated flex items-center justify-center transition-colors duration-200 relative"
         title="Chat on WhatsApp (+961 81 670100)"
       >
-        <MessageSquare className="w-7 h-7 fill-current" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#ef6000] border-2 border-white" />
+        <MessageSquare className="w-6 h-6 fill-current" />
       </a>
     </div>
   );

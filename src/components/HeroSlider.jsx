@@ -133,7 +133,6 @@ export default function HeroSlider({ setActiveTab, isStatic = false }) {
                 width={isStatic ? '1903' : '1920'}
                 height={isStatic ? '566' : '648'}
                 loading={i === 0 ? 'eager' : 'lazy'}
-                fetchPriority={i === 0 ? 'high' : 'auto'}
                 decoding="async"
                 onLoad={!isStatic && i === 0 ? handleFirstSlideLoad : undefined}
               />
