@@ -27,14 +27,26 @@ import TermsModal from './components/TermsModal';
 
 import { DASHBOARDS_CATALOG, PRODUCTS } from './data/siteData';
 import { startDynamicFavicon, triggerAnalyticsSurge } from './utils/dynamicFavicon';
+import CorporateHeader from './corporate/CorporateHeader';
+import CorporateHome from './corporate/CorporateHome';
+import CorporateFooter, { CorporatePageTitle } from './corporate/CorporateFooter';
+import './corporate/corporate.css';
 
 export default function App() {
+  // Corporate layout test (the7 "elementor-corporate" style): ?v=5 (also ?v=corporate or /corporate/)
+  const isCorporate = (() => {
+    const params = new URLSearchParams(window.location.search);
+    const v = (params.get('v') || params.get('version') || '').toLowerCase();
+    return v === '5' || v === 'corporate' || window.location.pathname.toLowerCase().startsWith('/corporate');
+  })();
   const isStaticVersion = (() => {
     const params = new URLSearchParams(window.location.search);
     const v = (params.get('v') || params.get('version') || '').toLowerCase();
-    return v === '1' || v === 'static' || window.location.pathname.startsWith('/static');
+    const still = (params.get('static') || '').toLowerCase();
+    return v === '1' || v === 'static' || still === '1' || still === 'true' || window.location.pathname.startsWith('/static');
   })();
   const [isLightTheme, setIsLightTheme] = useState(() => {
+    if (isCorporate) return true;
     const params = new URLSearchParams(window.location.search);
     const themeParam = (params.get('theme') || params.get('mode') || '').toLowerCase();
     const versionParam = (params.get('v') || params.get('version') || '').toLowerCase();
@@ -176,8 +188,19 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col ${isLightTheme ? 'bg-white text-[#16191e] is-light-theme' : 'bg-[#f4f5f6] text-[#17191c]'}${isStaticVersion ? ' is-static-version' : ''}`}>
+    <div className={`min-h-screen flex flex-col ${isCorporate ? 'corp-root is-light-theme' : isLightTheme ? 'bg-white text-[#16191e] is-light-theme' : 'bg-[#f4f5f6] text-[#17191c]'}${isStaticVersion ? ' is-static-version' : ''}`}>
       {/* Top Navbar */}
+      {isCorporate ? (
+        <CorporateHeader
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          cartItems={cartItems}
+          openCart={() => setIsCartOpen(true)}
+          openDemoModal={() => handleOpenDemo()}
+          setSelectedProduct={setSelectedProduct}
+          onSelectDashboard={handleSelectDashboard}
+        />
+      ) : (
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -190,10 +213,21 @@ export default function App() {
         isLightTheme={isLightTheme}
         toggleTheme={toggleTheme}
       />
+      )}
 
       {/* Main Content Areas */}
       <main id="main-content" className="flex-1" tabIndex={-1}>
-        {activeTab === 'home' && (
+        {isCorporate && activeTab !== 'home' && <CorporatePageTitle activeTab={activeTab} setActiveTab={setActiveTab} />}
+        {isCorporate && activeTab === 'home' && (
+          <CorporateHome
+            setActiveTab={setActiveTab}
+            setSelectedProduct={setSelectedProduct}
+            setSelectedIndustry={setSelectedIndustry}
+            openVideoModal={handleOpenVideo}
+            isStatic={isStaticVersion}
+          />
+        )}
+        {!isCorporate && activeTab === 'home' && (
           <>
             <HeroSlider
               setActiveTab={setActiveTab}
@@ -285,6 +319,9 @@ export default function App() {
       </main>
 
       {/* Footer */}
+      {isCorporate ? (
+        <CorporateFooter setActiveTab={setActiveTab} openTermsModal={() => setIsTermsModalOpen(true)} />
+      ) : (
       <Footer
         setSelectedProduct={setSelectedProduct}
         setActiveTab={setActiveTab}
@@ -293,6 +330,7 @@ export default function App() {
         isStatic={isStaticVersion}
         isLightTheme={isLightTheme}
       />
+      )}
 
       {/* Floating WhatsApp Contact */}
       <FloatingWhatsApp />

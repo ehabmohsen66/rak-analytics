@@ -63,6 +63,8 @@ const publicAssets = [
   'assets/industry-banking.jpg',
   'assets/industry-distribution.jpg',
   'assets/industry-beauty.jpg',
+  'assets/corporate/rak-logo-full.png',
+  'assets/corporate/who-we-are.jpg',
 ];
 
 function copyPublicAssets() {
@@ -74,8 +76,8 @@ function copyPublicAssets() {
         mkdirSync(resolve(destination, '..'), { recursive: true });
         copyFileSync(resolve('public', asset), destination);
       }
-      // Also generate /static/index.html, /light/index.html, and /lite/index.html as clean paths on static hosts
-      for (const dir of ['static', 'light', 'lite']) {
+      // Also generate /static/index.html, /light/index.html, /lite/index.html, and /corporate/index.html as clean paths on static hosts
+      for (const dir of ['static', 'light', 'lite', 'corporate']) {
         mkdirSync(resolve('dist', dir), { recursive: true });
         copyFileSync(resolve('dist', 'index.html'), resolve('dist', dir, 'index.html'));
       }
