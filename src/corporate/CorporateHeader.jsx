@@ -69,7 +69,7 @@ export default function CorporateHeader({ activeTab, setActiveTab, cartItems, op
       <div className="corp-brandbar">
         <div className="corp-container corp-brandbar-inner">
           <button className="corp-logo" onClick={() => nav('home')} aria-label="RAK Analytics home">
-            <img src="/assets/corporate/rak-logo-full.png" alt="RAK 4 Analytics. We don't just deliver data, we deliver results." width="563" height="194" />
+            <img src="/assets/Rak-analytics-logo.png" alt="RAK 4 Analytics" width="500" height="100" />
           </button>
           <div className="corp-brandbar-actions">
             <button className="corp-btn corp-btn-orange" onClick={openDemoModal}>Request a Demo</button>

@@ -47,7 +47,7 @@
 
 .corp-brandbar { border-bottom: 1px solid var(--corp-line); }
 .corp-brandbar-inner { display: flex; align-items: center; justify-content: space-between; min-height: 100px; gap: 24px; }
-.corp-logo img { height: 66px; width: auto; display: block; }
+.corp-logo img { height: 46px; width: auto; display: block; }
 .corp-brandbar-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 .corp-phone { font-size: 24px; font-weight: 700; color: #6a6a6a; letter-spacing: .01em; }
 .corp-phone:hover { color: var(--corp-orange); }
@@ -275,7 +275,7 @@
   .corp-topbar-mail { margin-left: 0; }
   .corp-topbar-regions { display: none; }
   .corp-brandbar-inner { min-height: 80px; }
-  .corp-logo img { height: 50px; }
+  .corp-logo img { height: 36px; }
   .corp-brandbar-actions { display: none; }
   .corp-menu-toggle { display: inline-flex; color: #555; padding: 8px; }
   .corp-navbar-inner { min-height: 48px; justify-content: flex-end; }
