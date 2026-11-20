@@ -42,7 +42,6 @@ export default function CorporateFooter({ setActiveTab, openTermsModal }) {
       <div className="corp-container corp-footer-grid">
         <div className="corp-footer-brand">
           <button onClick={() => setActiveTab('home')} aria-label="RAK Analytics home"><img src="/assets/Rak-analytics-logo.png" alt="RAK 4 Analytics" width="500" height="100" loading="lazy" /></button>
-          <p className="corp-footer-tagline">{SITE_INFO.tagline}</p>
         </div>
         <div className="corp-footer-col">
           <h2>Contact info</h2>

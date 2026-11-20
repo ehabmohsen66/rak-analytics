@@ -232,7 +232,6 @@
 .corp-footer-grid { display: grid; grid-template-columns: 1.05fr 1fr 1.15fr 1fr; gap: 36px; padding: 48px 0 46px; align-items: start; }
 .corp-footer-brand { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; align-self: center; }
 .corp-footer-brand img { width: 250px; max-width: 100%; height: auto; display: block; margin-inline: auto; }
-.corp-footer-tagline { margin: 10px 0 0; font-size: 12px; font-weight: 600; color: var(--corp-orange); line-height: 1.4; max-width: 210px; }
 .corp-footer-col h2 { font-family: var(--corp-display); font-weight: 600; font-size: 17px; color: var(--corp-orange); margin: 0 0 18px; line-height: 1.25; }
 .corp-footer-col h2.is-plain { color: #555; font-size: 16px; position: relative; padding-bottom: 8px; margin: 0 0 20px; }
 .corp-footer-col h2.is-plain::after { content: ''; position: absolute; left: 0; bottom: 0; width: 36px; height: 2px; background: var(--corp-orange); }
